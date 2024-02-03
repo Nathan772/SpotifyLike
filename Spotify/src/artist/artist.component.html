@@ -1,0 +1,83 @@
+<!-- bouton qui permet de lancer la recherche par artiste -->
+
+<!-- permet de lancer la recherche d'artiste avec un bouton -->
+<form (ngSubmit)="artistSearchOn()">
+  <button>Recherche par artiste</button>
+</form>
+
+<!-- formulaire qui gère la recherche d'artiste -->
+
+<div *ngIf="searchArtistOn">
+  <form (ngSubmit)="retrieveMusicsArtist(artistSearched)" #varForm="ngForm">
+    Nom artiste :
+    <input
+      type="text"
+      required
+      maxlength="50"
+      minlength="2"
+      pattern="[a-zA-Z ]+"
+      name="artiste"
+      [(ngModel)]="artistSearched"
+      #nomArtistControler="ngModel"
+    />
+    <div *ngIf="nomArtistControler.dirty && nomArtistControler.invalid">
+      <div *ngIf="nomArtistControler.errors.minLength">
+        Vous n'avez pas assez pas assez de caractère : il en faut 4 au minimum
+      </div>
+
+      <div *ngIf="nomArtistControler.errors.required">
+        Vous devez remplir le champ avec le nom d'un artiste
+      </div>
+
+      <div *ngIf="nomArtistControler.errors.pattern">
+        Vous n'avez pas respecté le texte qui était autorisé
+      </div>
+
+      <div *ngIf="nomArtistControler.errors.maxLength">
+        Ce nom d'artiste dépasse la longueur maximale attendue
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="varForm.invalid">Rechercher</button>
+  </form>
+</div>
+
+<!--partie qui gère l'affichage des musiques trouvées pour l'artiste -->
+
+<div *ngIf="musicArtistFound">
+  L'artiste que vous cherchiez a été trouvé... :
+
+  <ul>
+    <!-- on affiche chaque musique associé à l'artiste -->
+    <li *ngFor="let track of tracksArtist">
+      {{ track.name }}
+      <!-- on propose un ensemble de playlist dans lesquels ajouter la musique (début) ssi le user
+      est connecté -->
+      <div *ngIf="monService2 != null && monService2.isConnected">
+        <form (ngSubmit)="playListAddOn(track.id)">
+          <button type="submit">+</button>
+        </form>
+      </div>
+    </li>
+  </ul>
+
+  <!-- formulaire qui indique les playlist auxquelles on souhaite ajouter des sons (début) -->
+
+  <div *ngIf="addPlaylist">
+    Dans quelle playlist souhaitez vous ajouter cette musique ? :
+
+    <ul>
+      <!-- on affiche chaque playlist et chacune d'elle représente un formulaire (début) -->
+
+      <li *ngFor="let playlist of monService2.playlists">
+        <form (ngSubmit)="addSongPlaylist(playlist)">
+          <button>{{ playlist.name }}</button>
+        </form>
+      </li>
+
+      <!-- on affiche chaque playlist et chacune d'elle représente un formulaire (fin) -->
+    </ul>
+  </div>
+</div>
+
+<!-- formulaire qui indique les playlist auxquelles on souhaite ajouter des sons (fin) -->

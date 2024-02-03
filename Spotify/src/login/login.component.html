@@ -1,0 +1,44 @@
+<!-- formulaire qui permet de se déconnecter -->
+
+<div *ngIf="this.monservice.isConnected">
+  <form (ngSubmit)="deconnexion()">
+    <button>deconnexion</button>
+  </form>
+</div>
+
+<!-- formulaire qui permet de se connecter -->
+
+<div *ngIf="!this.monservice.isConnected">
+  <form (ngSubmit)="initUser()" #varForm="ngForm">
+    Nom de l'utilisateur :
+    <input
+      type="text"
+      required
+      maxlength="20"
+      minlength="3"
+      pattern="[a-zA-Z0-9]+"
+      name="user"
+      [(ngModel)]="nomUser"
+      #nomUserControler="ngModel"
+    />
+    <div *ngIf="nomUserControler.dirty && nomUserControler.invalid">
+      <div *ngIf="nomUserControler.errors.minLength">
+        Vous n'avez pas assez pas assez de caractère : il en faut 4 au minimum
+      </div>
+
+      <div *ngIf="nomUserControler.errors.required">
+        Vous devez remplir le champ avec la tâche
+      </div>
+
+      <div *ngIf="nomUserControler.errors.pattern">
+        Vous n'avez pas respecté le texte qui était autorisé
+      </div>
+
+      <div *ngIf="nomUserControler.errors.maxLength">
+        Ce dépasse la longueur maximale attendue
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="varForm.invalid">Connexion</button>
+  </form>
+</div>

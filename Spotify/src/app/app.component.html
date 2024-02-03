@@ -1,0 +1,23 @@
+<h1>Spotify !</h1>
+
+<!--
+à chaque fois que playlistEmit est utilisée 
+(c'est à dire à chaque fois que la playlist du module "playlist" est mise à jour)
+ on met à jour la playlist du père "app.component" pour que ce soit la même que celle du module
+ " playlist ""
+-->
+
+<app-login> </app-login>
+
+<!-- on affecte au champ "playlists" du module album 
+  la liste de playlist que possède le module "app.component" -->
+<app-playlist (serviceEmit)="updateService($event)"> </app-playlist>
+
+<!--on va donner le contenu du champ "monService" de appComponent à "monService" de app-album-->
+
+<app-album [monService2]="monService"> </app-album>
+
+<!--on va donner le contenu du champ "monService" de appComponent à 
+  "monService2" de app-artist-->
+
+<app-artist [monService2]="monService"> </app-artist>
